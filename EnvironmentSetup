@@ -1,4 +1,14 @@
-Acquire permissions to AWS resources via IAM *or* AWS CLI ~/.aws/credential
+If running from EC2
+ acquire permissions to AWS resources via IAM
+ configure default region at ~/.aws/config
+  [default]
+  region=us-east-1
+If running from on-prem
+ AWS CLI, ~/.aws/credential, and ~/.aws/config need configuring
+  ~/.aws/credential
+   [default]
+   aws_access_key_id = abc123
+   aws_secret_access_key = abc123
 
 CentOS 7 env setup
  sudo yum install -y epel-release
