@@ -1,0 +1,9 @@
+Acquire permissions to AWS resources via IAM *or* AWS CLI ~/.aws/credential
+
+CentOS 7 env setup
+ sudo yum install -y epel-release
+ sudo yum install -y python-pip
+ sudo pip install --upgrade pip
+ sudo pip install boto3
+Then create 'script.py' files and run them with 'python script.py'
+Or enter the python interpreter with 'python' then type in the script
