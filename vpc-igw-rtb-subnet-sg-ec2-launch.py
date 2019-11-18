@@ -35,8 +35,20 @@ print("Subnet created with ID " + subnet.id + ".")
 route_table.associate_with_subnet(SubnetId=subnet.id)
 print("Subnet ID " + subnet.id + " associated with Route Table " + route_table.id + ".")
 
+sec_group = ec2.create_security_group(
+	GroupName='slice_0',
+	Description='slice_0 sec group',
+	VpcId=vpc.id
+)
+print("Security Group created with ID " + sec_group.id = ".")
 
-
+sec_group.authorize_ingress(
+	CidrIp='0.0.0.0/0',
+	IpProtocol='icmp',
+	FromPort=-1,
+	ToPort=-1
+)
+print("Opened ICMP (ping) from 0.0.0.0/0 
 
 
 
@@ -47,6 +59,10 @@ print("Subnet ID " + subnet.id + " associated with Route Table " + route_table.i
 
 
 # find way to make 0.0.0.0/0 a variable and call it when you need it
-# find a way to have user input EC2 instance type for customization
+# find a way to have user input EC2 AMI and instance type for customization
 # find a way to make a prod/env conditional parameter
+# try to add cloudwatch alarm for CPU via boto3 at the end
+# ping the server at the end and show results
+# try to find a way to delete things at the end in the right order (cw alarm, ec2, subnet...) with pauses in between
+
 # add these to issues
