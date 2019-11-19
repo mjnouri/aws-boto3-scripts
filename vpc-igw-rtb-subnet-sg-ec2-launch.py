@@ -2,6 +2,11 @@ import boto3
 
 ec2 = boto3.resource('ec2')
 
+print("Hint: Choose ami-00dc79254d0461090")
+userec2amiid = raw_input("Choose your EC2 AMI ID: ")
+userec2instancetype = raw_input("Choose your EC2 instance type: ")
+print("")
+
 vpc = ec2.create_vpc(CidrBlock='192.168.0.0/16')
 vpc.wait_until_available()
 vpc.create_tags(
@@ -60,8 +65,8 @@ print("Opened ICMP to 0.0.0.0/0 on Security Group ID " + sec_group.id + ".")
 print("")
 
 instance = ec2.create_instances(
-	ImageId='ami-00dc79254d0461090',
-	InstanceType='t3.small',
+	ImageId=userec2amiid,
+	InstanceType=userec2instancetype,
 	MinCount=1,
 	MaxCount=1,
 	NetworkInterfaces=[
