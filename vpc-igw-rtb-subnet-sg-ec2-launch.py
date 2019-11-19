@@ -4,6 +4,7 @@ ec2 = boto3.resource('ec2')
 
 print("Hint: Choose ami-00dc79254d0461090")
 userec2amiid = raw_input("Choose your EC2 AMI ID: ")
+userec2nametag = raw_input("Choose your EC2 Name tag: ")
 userec2instancetype = raw_input("Choose your EC2 instance type: ")
 print("")
 
@@ -61,6 +62,14 @@ sec_group.authorize_ingress(
 	FromPort=-1,
 	ToPort=-1
 )
+
+sec_group.authorize_ingress(
+	CidrIp='0.0.0.0/0',
+	IpProtocol='tcp',
+	FromPort=22,
+	ToPort=22
+)
+
 print("Opened ICMP to 0.0.0.0/0 on Security Group ID " + sec_group.id + ".")
 print("")
 
@@ -69,6 +78,7 @@ instance = ec2.create_instances(
 	InstanceType=userec2instancetype,
 	MinCount=1,
 	MaxCount=1,
+	KeyName='coretest',
 	NetworkInterfaces=[
 		{
 			'SubnetId': subnet.id,
@@ -76,25 +86,24 @@ instance = ec2.create_instances(
 			'AssociatePublicIpAddress': True,
 			'Groups': [sec_group.group_id]
 		}
+	],
+	TagSpecifications=[
+		{
+			'ResourceType': 'instance',
+			'Tags': [
+				{
+					'Key': 'Name',
+					'Value': userec2nametag
+				},
+			]
+		},
 	]
 )
 instance[0].wait_until_running()
 print("EC2 Instance launched with instance ID " + instance[0].id + ".")
 print("")
 
-raw_input("Press enter to terminate the EC2 instance..")
+raw_input("Press enter to terminate EC2 instance: " + userec2nametag + " ...")
 ec2instanceids = [instance[0].id]
 ec2.instances.filter(InstanceIds = ec2instanceids).terminate()
 print ("")
-
-
-
-
-
-
-
-
-
-
-
-
