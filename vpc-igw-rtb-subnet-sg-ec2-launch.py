@@ -82,20 +82,10 @@ instance[0].wait_until_running()
 print("EC2 Instance launched with instance ID " + instance[0].id + ".")
 print("")
 
+raw_input("Press enter to terminate the EC2 instance..")
+ec2instanceids = [instance[0].id]
+ec2.instances.filter(InstanceIds = ec2instanceids).terminate()
+print ("")
 
 
-# add Name tag to EC2
-# use coretest key pair
-# add Name tag to EC2
 
-
-
-# find way to make 0.0.0.0/0 a variable and call it when you need it
-# find a way to have user input EC2 AMI and instance type for customization
-# find a way to make a prod/env conditional parameter
-# try to add cloudwatch alarm for CPU via boto3 at the end
-# ping the server at the end and show results
-# try to find a way to delete things at the end in the right order (cw alarm, ec2, subnet...) with pauses in between
-
-
-# add these to issues
