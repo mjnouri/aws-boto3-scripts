@@ -6,6 +6,7 @@ print("Hint: Choose ami-00dc79254d0461090")
 userec2amiid = raw_input("Choose your EC2 AMI ID: ")
 userec2nametag = raw_input("Choose your EC2 Name tag: ")
 userec2instancetype = raw_input("Choose your EC2 instance type: ")
+userpublicip = raw_input("What IP should have access to the EC2: ")
 print("")
 
 vpc = ec2.create_vpc(CidrBlock='192.168.0.0/16')
@@ -14,7 +15,7 @@ vpc.create_tags(
 	Tags=[
 		{
 			"Key": "Name",
-			"Value": "test_vpc"
+			"Value": "Test VPC"
 		}
 	]
 )
@@ -57,14 +58,14 @@ print("Security Group created with ID " + sec_group.id + ".")
 print("")
 
 sec_group.authorize_ingress(
-	CidrIp='0.0.0.0/0',
+	CidrIp=userpublicip,
 	IpProtocol='icmp',
 	FromPort=-1,
 	ToPort=-1
 )
 
 sec_group.authorize_ingress(
-	CidrIp='0.0.0.0/0',
+	CidrIp=userpublicip,
 	IpProtocol='tcp',
 	FromPort=22,
 	ToPort=22
