@@ -2,15 +2,51 @@ import boto3
 
 ec2 = boto3.resource('ec2')
 
-print("Hint: Choose ami-00dc79254d0461090")
-userec2amiid = raw_input("Choose your EC2 AMI ID: ")
-userec2nametag = raw_input("Choose your EC2 Name tag: ")
-userec2instancetype = raw_input("Choose your EC2 instance type: ")
+print("1 = Windows Server 2016")
+print("2 = Windows Server 2019")
+print("3 = Ubuntu")
+print("4 = CentOS 7")
+print("5 = Amazon Linux 2")
+userosselection = raw_input("Choose your Operating System: ")
+
+print("")
+
+print("1 - t3.medium - 2 CPU, 4 GB RAM")
+print("2 - m5.large  - 2 CPU, 8 GB RAM")
+userinstancetypeselection = raw_input("Choose your Instance Type: ")
+
+print("")
+
+if userosselection == "1":
+ ami = "ami-08c7081300f7d9abb"
+ os = "Windows Server 2016"
+elif userosselection == "2":
+ ami = "ami-08b11fc5bd2026dee"
+ os = "Windows Server 2019"
+elif userosselection == "3":
+ ami = "ami-04763b3055de4860b"
+ os = "Ubuntu"
+elif userosselection == "4":
+ ami = "ami-02eac2c0129f6376b"
+ os = "CentOS 7"
+elif userosselection == "5":
+ ami = "ami-00068cd7555f543d5"
+ os = "Amazon Linux 2"
+
+if userinstancetypeselection == "1":
+ instancetype = "t3.medium"
+elif userinstancetypeselection == "2":
+ instancetype = "m5.large"
+
 userpublicip = raw_input("What IP should have access to the EC2: ")
 print("")
 
+print("You selected " + os + " with an AMI ID of " + ami + " to run on a " + instancetype + " instance type, and only " + userpublicip + " will have ICMP and SSH access to the EC2.")
+
+print("")
+
 vpc = ec2.create_vpc(CidrBlock='192.168.0.0/16')
-vpc.wait_until_available()
+vpc.wait_until_exists()
 vpc.create_tags(
 	Tags=[
 		{
@@ -71,12 +107,15 @@ sec_group.authorize_ingress(
 	ToPort=22
 )
 
-print("Opened ICMP to 0.0.0.0/0 on Security Group ID " + sec_group.id + ".")
+print("Opened ICMP and SSH to " + userpublicip + " on Security Group ID " + sec_group.id + ".")
+print("")
+
+print("Launching EC2...")
 print("")
 
 instance = ec2.create_instances(
-	ImageId=userec2amiid,
-	InstanceType=userec2instancetype,
+	ImageId=ami,
+	InstanceType=instancetype,
 	MinCount=1,
 	MaxCount=1,
 	KeyName='coretest',
@@ -94,7 +133,7 @@ instance = ec2.create_instances(
 			'Tags': [
 				{
 					'Key': 'Name',
-					'Value': userec2nametag
+					'Value': os
 				},
 			]
 		},
@@ -104,7 +143,10 @@ instance[0].wait_until_running()
 print("EC2 Instance launched with instance ID " + instance[0].id + ".")
 print("")
 
-raw_input("Press enter to terminate EC2 instance: " + userec2nametag + " ...")
+raw_input("Press enter to terminate EC2 instance: " + os + " ...")
 ec2instanceids = [instance[0].id]
 ec2.instances.filter(InstanceIds = ec2instanceids).terminate()
+print ("")
+
+print ("EC2 instance ID " + instance[0].id + " terminated.")
 print ("")
