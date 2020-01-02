@@ -34,11 +34,17 @@ elif userosselection == "4":
 elif userosselection == "5":
  ami = "ami-00068cd7555f543d5"
  os = "Amazon Linux 2"
+else:
+ print("Please select a valid menu option.")
+ exit()
 
 if userinstancetypeselection == "1":
  instancetype = "t3.medium"
 elif userinstancetypeselection == "2":
  instancetype = "m5.large"
+else:
+ print("Please select a valid menu option.")
+ exit()
 
 userpublicip = raw_input("What IP should have access to the EC2: ")
 print("")
