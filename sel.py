@@ -13,12 +13,6 @@ userosselection = raw_input("Choose your Operating System: ")
 
 print("")
 
-print("1 - t3.medium - 2 CPU, 4 GB RAM")
-print("2 - m5.large  - 2 CPU, 8 GB RAM")
-userinstancetypeselection = raw_input("Choose your Instance Type: ")
-
-print("")
-
 if userosselection == "1":
  ami = "ami-08c7081300f7d9abb"
  os = "Windows Server 2016"
@@ -37,6 +31,12 @@ elif userosselection == "5":
 else:
  print("Please select a valid menu option.")
  exit()
+
+print("1 - t3.medium - 2 CPU, 4 GB RAM")
+print("2 - m5.large  - 2 CPU, 8 GB RAM")
+userinstancetypeselection = raw_input("Choose your Instance Type: ")
+
+print("")
 
 if userinstancetypeselection == "1":
  instancetype = "t3.medium"
